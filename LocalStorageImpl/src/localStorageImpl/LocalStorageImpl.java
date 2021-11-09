@@ -78,7 +78,7 @@ public class LocalStorageImpl extends Storage{
 	}
 	
 	@Override
-	public void preview(File f) {
+	public void preview(File f)  {
 		File [] prevFiles=f.listFiles();
 		System.out.println("Trazeni fajlovi:");
 		for(File file:prevFiles) {
