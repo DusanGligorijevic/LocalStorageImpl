@@ -1,6 +1,7 @@
 package localStorageImpl;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -20,8 +21,8 @@ public class LocalStorageImpl extends Storage{
 	}
 
 	@Override
-	public void create(String path, int maxFolders) {
-		String name ="file";
+	public void createFiles(String path, String name, int maxFolders) {
+
 		for(int i = 0; i < maxFolders; i++) {
 			
 			//Instantiate the File class   
@@ -31,7 +32,7 @@ public class LocalStorageImpl extends Storage{
             if(bool){  
                System.out.println("folder "+name+i+" je uspesno kreiran!");  
             }else{  
-               System.out.println("Greska pri kreiranju foldera "+name);  
+               System.out.println("Greska pri kreiranju foldera " + name + ". Folder sa ovim imenom vec postoji!");  
             }
 		}
 		
@@ -49,66 +50,51 @@ public class LocalStorageImpl extends Storage{
 
 	@Override
 	public void transfer(String location,String destination,String file) {
-		File folder = new File(location);
-		File [] prevFiles=folder.listFiles();
-		for(File f:prevFiles) {
-				File file1 = new File(file);
-				if(file1.exists()) {
+		File target = new File(location);
+			if(target.exists())	{
 					File dest = new File(destination);
 					try {
-						Files.copy(file1.toPath(), dest.toPath(),StandardCopyOption.REPLACE_EXISTING);
+						Files.copy(target.toPath(), dest.toPath(),StandardCopyOption.REPLACE_EXISTING);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}else
-					System.out.println("Ne postoji folder!");	
-		}			
+					System.out.println("Ne postoji folder ili fajl!");	
 	}
-
 	@Override
-	public void preview(File f,String extension) {
+	public void previewExt(String path, String extension) {
+		File f = new File(path);
 		File [] prevFiles=f.listFiles();
 		System.out.println("Trazeni fajlovi:");
 		for(File file:prevFiles) {
-			if(f.getName().contains(extension)) {
-				System.out.println(f.getName());
-				
+			if(file.getName().contains(extension)) {
+				System.out.println(file.getName());
 			}
-		}		
-	}
-	
-	@Override
-	public void preview(File f)  {
-		File [] prevFiles=f.listFiles();
-		System.out.println("Trazeni fajlovi:");
-		for(File file:prevFiles) {
-				System.out.println(f.getName());
-				
-			
-		}		
-	}
-	
-	@Override
-	public void preview(File f,boolean directoriesOnly) {
-		File [] prevFiles=f.listFiles();
-		System.out.println("Trazeni fajlovi:");
-		if (directoriesOnly==true) {
-			for(File file:prevFiles) {
-				if(f.isDirectory()) {
-					System.out.println(f.getName());
-					
-				}
-			}
-		}else {
-			for(File file:prevFiles) {
-				if(f.isDirectory()==false) {
-					System.out.println(f.getName());
-					
-				}
-			}
-			
+		}
 		}
 	
+	@Override
+	public void previewAll(String path)  {
+		File f = new File(path);
+		File [] prevFiles=f.listFiles();
+		System.out.println("Trazeni fajlovi:");
+		for(File file:prevFiles) {
+				System.out.println(file.getName());
+				
+			
+		}		
+	}
+	
+	@Override
+	public void previewDir(String path) {
+		File f = new File(path);
+		File [] prevFiles=f.listFiles();
+		System.out.println("Trazeni fajlovi:");
+			for(File file:prevFiles) {
+				if(file.isDirectory()) {
+					System.out.println(file.getName());	
+				}
+			}	
 	}
 
 	@Override
@@ -117,4 +103,37 @@ public class LocalStorageImpl extends Storage{
 		
 	}
 
+	@Override
+	public void download(String path) {
+		File f = new File("C:\\Users\\38160\\git\\SK-FileStorage\\Storage_sk\\Storage\\src\\download\\b");
+		File f1 = new File(path);
+		if(f1.exists()) {
+			try {
+				Files.copy(f1.toPath(), f.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+
+	@Override
+	public void createFolders(String path,String name, String number) {
+		for(int i=0; i<Integer.parseInt(number); i++) {
+		//Instantiate the File class   
+        File storage = new File(path+name+i);  
+        //Creating a folder using mkdir() method  
+        boolean bool = storage.mkdir();  
+        if(bool){  
+           System.out.println("Folder je uspesno kreiran!");  
+           
+        }else{  
+           System.out.println("Greska pri kreiranju Foldera!");  
+        }  
+        }
+}
+
+		
 }
