@@ -97,11 +97,6 @@ public class LocalStorageImpl extends Storage{
 			}	
 	}
 
-	@Override
-	public void preview() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void download(String path) {
