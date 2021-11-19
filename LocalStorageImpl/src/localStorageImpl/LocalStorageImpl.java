@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Collections;
 
 import storage.Permissions;
 import storage.Storage;
@@ -157,6 +159,39 @@ public class LocalStorageImpl extends Storage{
     	addUser(user);
     	System.out.println("Uspesno logovanje!");
   	
+	}
+
+	@Override
+	public void prevName(String path, String name) {
+		File f = new File(path);
+		File [] prevFiles=f.listFiles();
+		
+		int cnt=0;
+		System.out.println("Trazeni fajlovi:");
+			for(File file:prevFiles) {
+				if(file.getName().contentEquals(name)) {
+					System.out.println(file.getName());	
+					cnt++;
+				}
+			}	
+		if(cnt==0) {
+			System.out.println("Trazeni fajl ne postoji!");
+
+		}
+	}
+
+	@Override
+	public void previewSorted(String path) {
+		File f = new File(path);
+		File [] prevFiles=f.listFiles();
+		//Collections.sort(prevFiles);
+		Arrays.sort(prevFiles);
+		System.out.println("Trazeni fajlovi:");
+			for(File file:prevFiles) {
+				System.out.println(file.getName());	
+				
+			}
+		
 	}
 
 		
