@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import storage.Permissions;
 import storage.Storage;
 import storage.StorageManager;
+import storage.User;
 import localStorageImpl.*;
 
 public class LocalStorageImpl extends Storage{
@@ -26,11 +28,11 @@ public class LocalStorageImpl extends Storage{
 		for(int i = 0; i < maxFolders; i++) {
 			
 			//Instantiate the File class   
-            File storage = new File(StoragePath+"\\"+name+i);  
+            File storage = new File(StoragePath+"\\"+i+name);  
             //Creating a folder using mkdir() method  
             boolean bool = storage.mkdir();  
             if(bool){  
-               System.out.println("folder "+name+i+" je uspesno kreiran!");  
+               System.out.println("folder "+i+name+" je uspesno kreiran!");  
             }else{  
                System.out.println("Greska pri kreiranju foldera " + name + ". Folder sa ovim imenom vec postoji!");  
             }
@@ -129,6 +131,33 @@ public class LocalStorageImpl extends Storage{
         }  
         }
 }
+
+	@Override
+	public void initialise(User user, String storagePath) {
+
+    	System.out.println("Korisnik" + user.getUsername() + "  pokusava da kreira skladiste...");
+    	
+    	if(user.getPrivileges().get(Permissions.create)) {
+    		
+    		//Instantiate the File class   
+            File storage = new File(storagePath);  
+            
+            //Creating a folder using mkdir() method  
+            boolean bool = storage.mkdir();  
+            if(bool){  
+               System.out.println("Skladiste je uspesno kreirano!");  
+               StoragePath=storagePath;
+               createConfigFile(user);
+            }else{  
+               System.out.println("Greska pri kreiranju skladista!");  
+            }  
+    	}else
+    	System.out.println("Korisnik nema dozvolu da kreira skladiste!");
+    	this.setConnectedUser(user);
+    	addUser(user);
+    	System.out.println("Uspesno logovanje!");
+  	
+	}
 
 		
 }
